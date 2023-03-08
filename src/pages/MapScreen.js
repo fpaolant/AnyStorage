@@ -11,7 +11,17 @@ function MapScreen(props) {
   return (
     <Page style={styles.container}>
       <Text style={styles.textcityname}>Map view in {city}</Text>
-      <MapView style={styles.map} />
+      <MapView style={styles.map}>
+        {/* // LIST OF MARKERS
+          this.state.markers.map((marker, index) => (
+          <Marker
+            key={index}
+            coordinate={marker.latlng}
+            title={marker.title}
+            description={marker.description}
+          />
+        ))*/}
+      </MapView>
     </Page>
   );
 }
