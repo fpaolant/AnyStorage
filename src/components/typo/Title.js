@@ -3,7 +3,7 @@ import {StyleSheet, Text} from 'react-native';
 
 
 function Title({text}) {
-    return <Text style={styles.text}>{text}</Text>;
+    return (<Text style={styles.text}>{text}</Text>);
 }
 
 export default Title;

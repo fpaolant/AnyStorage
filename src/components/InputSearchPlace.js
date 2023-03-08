@@ -5,7 +5,7 @@ const INITIAL_STATE = {
     focusIn: false,
 };
 
-class InputHome extends React.Component {
+class InputSearchPlace extends React.Component {
 
     constructor(props) {
         super(props);
@@ -29,11 +29,12 @@ class InputHome extends React.Component {
             placeholder={placeholder? placeholder: ''}
             onFocus={() => this.setState({focusIn: true})}
             onBlur={() => this.setState({focusIn: false})}
+            clearButtonMode={'always'}
         />;
     }
 }
 
-export default InputHome;
+export default InputSearchPlace;
 
 const styles = StyleSheet.create({
     input: {
@@ -45,6 +46,6 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     inputFocused: {
-        borderColor: 'red',
+        borderColor: '#010101',
     },
 });

@@ -5,7 +5,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './src/stores'
 import { NavigationContainer } from '@react-navigation/native';
 import  RootNavigator from './src/navigation/RootNavigator';
-//import Router from './src/components/Router';
 
 
 export default function App() {
@@ -28,15 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
 
-/**
- *
-  <SafeAreaView>
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <StatusBar style="auto" />
-      </View>
-    </SafeAreaView>
- */
+

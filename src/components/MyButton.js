@@ -32,6 +32,7 @@ class MyButton extends React.Component {
         const {pressed} = this.state;
         return (
                 <Pressable
+                    {...this.props}
                     style={[styles.pressable, pressed ? styles.pressed : {}]}
                     onPress={this.props.onPress}
                     onPressIn={this.handlePressIn}

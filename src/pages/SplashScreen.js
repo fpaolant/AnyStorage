@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import MyButton from '../components/MyButton';
 import Page from '../components/Page';
 import Images from '../images';
-import Title from '../components/typo';
-import Subtitle from '../components/typo';
+import { Title, Subtitle } from '../components/typo';
 import { firstAccess } from '../actions';
 
 
@@ -18,7 +17,7 @@ class SplashScreen extends React.Component {
     }
  
     handleGettingStarted() {
-        const {dispatch, navigation: { navigate}} = this.props;
+        const {dispatch, navigation: { navigate }} = this.props;
         dispatch(firstAccess());
         //navigate && navigate('Home');
 
