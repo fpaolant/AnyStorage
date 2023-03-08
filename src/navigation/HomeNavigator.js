@@ -1,6 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from '../pages/HomeScreen'
+import MapScreen from '../pages/MapScreen'
 import SearchScreen from "../pages/SearchScreen";
 
 
@@ -21,6 +22,7 @@ export default HomeNavigator = () => {
         <HomeStack.Navigator> 
             <HomeStack.Group screenOptions={screenOptions}>
                 <HomeStack.Screen name={'Home'} component={HomeScreen} />
+                <HomeStack.Screen name={'Map'} component={MapScreen} />
             </HomeStack.Group>
             <HomeStack.Group screenOptions={{ presentation: 'modal' }}>
                 <HomeStack.Screen name="SearchPlace" component={SearchScreen}/>

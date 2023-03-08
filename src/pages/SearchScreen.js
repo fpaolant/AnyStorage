@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, FlatList } from "react-native";
+import { Text, Pressable, StyleSheet, FlatList } from "react-native";
 import { connect } from "react-redux";
 
 import Page from "../components/Page";
@@ -7,15 +7,25 @@ import InputSearchPlace from "../components/InputSearchPlace";
 import { setPlaceName } from "../actions";
 import { sSearchPlaceText } from "../selectors";
 
-function SearchScreen({ searchPlaceText, changeText }) {
+function SearchScreen({ searchPlaceText, changeText, navigation }) {
   const data = [
     "Milano", 
     "Roma", 
     "Bologna"
   ];
+
+  const onPressInHandle = (item) => {
+    console.log("ITEM ", item)
+    navigation.goBack();
+    navigation.navigate('Map', {city: item});
+  }
   
   const renderItem = ({item}) => {
-    return <Text>{item}</Text>
+    return (
+        <Pressable onPressIn={ () => { onPressInHandle(item) } }>
+            <Text>{item}</Text>
+        </Pressable>
+    )
   }
   
   
