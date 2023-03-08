@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
+import MapView from 'react-native-maps';
+
 import Page from "../components/Page";
 
 function MapScreen(props) {
@@ -8,7 +10,8 @@ function MapScreen(props) {
   const city = props.route.params.city
   return (
     <Page style={styles.container}>
-      <Text>Map view in {city}</Text>
+      <Text style={styles.textcityname}>Map view in {city}</Text>
+      <MapView style={styles.map} />
     </Page>
   );
 }
@@ -17,6 +20,15 @@ export default MapScreen;
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    paddingHorizontal: 0
+  },
+  textcityname: {
+    textAlign: "center",
+    backgroundColor: 'blue',
+    color: '#fff'
+  },
+  map: {
+    width: '100%',
+    height: '100%',
   }
 });

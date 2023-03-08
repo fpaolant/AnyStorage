@@ -15,7 +15,6 @@ function SearchScreen({ searchPlaceText, changeText, navigation }) {
   ];
 
   const onPressInHandle = (item) => {
-    console.log("ITEM ", item)
     navigation.goBack();
     navigation.navigate('Map', {city: item});
   }
