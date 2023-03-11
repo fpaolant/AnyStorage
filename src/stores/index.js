@@ -13,17 +13,21 @@ import {
 } from 'redux-persist';
 import AppReducer from '../reducers/AppReducer';
 import SearchPlaceReducer from '../reducers/SearchPlaceReducer';
+import LoginRegisterReducer from '../reducers/LoginRegisterReducer';
+import UserReducer from '../reducers/UserReducer';
 
 
 const reducers = combineReducers({
   app: AppReducer,
-  home: SearchPlaceReducer
+  loginRegister: LoginRegisterReducer,
+  user: UserReducer,
+  searchPlace: SearchPlaceReducer
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: [], // <<<<<< reset 'app'
+  blacklist: ['loginRegister'], // <<<<<< reset 'app'
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers);

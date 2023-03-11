@@ -1,83 +1,106 @@
 import React from "react";
-import { Text, Pressable, StyleSheet, FlatList } from "react-native";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Pressable, StyleSheet } from "react-native";
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Ionicons } from '@expo/vector-icons'; 
 
-import Page from "../components/Page";
-import InputSearchPlace from "../components/InputSearchPlace";
-import { setPlaceName } from "../actions";
 import { sSearchPlaceText } from "../selectors";
+import { searchPlaceTextChange } from "../reducers/SearchPlaceReducer";
 
-function SearchScreen({ searchPlaceText, changeText, navigation }) {
-  const data = [
-    "Milano", 
-    "Roma", 
-    "Bologna"
-  ];
+import Config from "../constants/Config"
+import Color from "../constants/Color";
+import Page from "../components/Page";
 
-  const onPressInHandle = (item) => {
-    navigation.goBack();
-    navigation.navigate('Map', {city: item});
-  }
+
+
+
+
+
+
+import Subtitle from "../components/typo/Subtitle";
+
+
+
+
+function SearchScreen({ navigation }) {
+
+  const dispatch = useDispatch();
+  const placeName = useSelector(sSearchPlaceText);
   
-  const renderItem = ({item}) => {
+  const onItemPress = (data, details = null) => {
+    const city = data['structured_formatting']['main_text'];
+    dispatch(searchPlaceTextChange(city));
+    navigation.goBack();
+    navigation.navigate('Map', {city});
+  }
+
+  const getLeftItem = function () {
     return (
-        <Pressable onPressIn={ () => { onPressInHandle(item) } }>
-            <Text>{item}</Text>
-        </Pressable>
+      <Pressable 
+        onPress={() => { navigation.goBack() }}>
+        <Ionicons name="chevron-back" size={24} color={Color.blue} />
+      </Pressable>
     )
   }
   
-  
-  
   return (
     <Page style={styles.container}>
-      <InputSearchPlace 
-          value={searchPlaceText} 
-          handleChangeText={changeText} 
-          placeholder="Città, indirizzo o location"
-          autoFocus={true}
+      <Subtitle text="Scrivi il nome di una città"></Subtitle>
+      <GooglePlacesAutocomplete
+        //currentLocation={true}
+        //currentLocationLabel='attorno a me'
+        placeholder='citta, indirizzo'
+        value={placeName}
+        query={{
+          key: Config.GAPIKEY,
+          language: 'it', // language of the results
+          components: 'country:it',
+        }}
+        minLength={3}
+        debounce={400}
+        fetchDetails={false}
+        onPress={onItemPress}
+        styles={ styles.autocompleteInput }
+        renderLeftButton={getLeftItem}
+
+        clearButtonMode={true}
+        autoFocus={true}
+       
       />
-      {data.length == 0 && (
-        <Text>Prova con un altro criterio di ricerca</Text>
-      )}
-      {data.length > 0 && (
-        <FlatList 
-          contentContainerStyle={styles.contentContainer}
-          data={data}
-          renderItem={renderItem}
-        />
-      )}
     </Page>
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    searchPlaceText: sSearchPlaceText(state),
-  };
-}
 
-function mapDispatchToProps(dispatch) {
-  return {
-    changeText(searchPlaceText) {
-      dispatch(setPlaceName(searchPlaceText));
-    },
-  };
-}
+export default SearchScreen;
 
-//export default SearchScreen;
-const SearchScreenContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SearchScreen);
 
-export default SearchScreenContainer;
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    paddingTop: 30,
+    alignItems: "center"
   },
   contentContainer: {
     paddingVertical: 12
+  },
+  autocompleteInput : {
+    textInputContainer: {
+      width: '100%'
+    },
+    textInput: {
+      height: 38,
+      width: '100%',
+      color: '#5d5d5d',
+      fontSize: 25,
+      fontWeight: 800,
+      borderColor: Color.blue,
+      borderBottomWidth: 2,
+      borderRadius: 0
+    },
+    separator: {
+      height: 0.5,
+      backgroundColor: Color.blue,
+    },
   }
 });

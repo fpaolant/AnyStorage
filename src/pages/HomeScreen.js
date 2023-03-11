@@ -1,23 +1,53 @@
-import React from "react";
-import { StyleSheet, Image, TextInput } from "react-native";
-import { connect } from "react-redux";
+import React, {useEffect} from "react";
+import { StyleSheet, Image, TextInput, Button } from "react-native";
+import { connect, useSelector, useDispatch } from "react-redux";
 import Page from "../components/Page";
 import Subtitle from "../components/typo/Title";
-import { setPlaceName } from "../actions";
+import { setPlaceName, signOut } from "../actions";
 import { sSearchPlaceText } from "../selectors";
 import Images from "../images";
+import { sLoggedIn } from "../selectors";
 
 function HomeScreen({ navigation }) {
+
+  const dispatch = useDispatch();
+
+
   const onPressInHandle = () => {
+    //navigation.navigate('Geo');
     navigation.navigate('SearchPlace');
   }
+
+  const onLoginPress = () => {
+    navigation.navigate('Access');
+  }
+
+  const onLogoutPress = () => {
+    dispatch(signOut());
+  }
+
+  const loggedIn = useSelector(sLoggedIn);
+
+  useEffect(() => {
+    navigation.setOptions({
+      
+      headerRight: () => (
+        <Button onPress={loggedIn? onLogoutPress: onLoginPress} title={loggedIn? 'Esci': 'Entra'} />
+      ),
+    });
+  }, [navigation, loggedIn]);
+
+
+
+
   return (
     <Page style={styles.container}>
       <Image source={Images.Logo} style={styles.image} resizeMode={"contain"} />
-      <Subtitle text="Trova lo Storage" />
+      <Subtitle text="Trova uno Storage" />
       <TextInput
             placeholder="Città, indirizzo o location"
             onPressIn={onPressInHandle}
+            readOnly={true}
             style={styles.input}
         />
     </Page>
@@ -51,6 +81,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
+    marginTop: 50,
     height: 150,
     marginBottom: 30,
   },

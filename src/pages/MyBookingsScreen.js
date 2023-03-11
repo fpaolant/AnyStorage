@@ -1,39 +1,62 @@
-import React from "react";
-import { StyleSheet, Text } from "react-native";
-import { connect } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { StyleSheet, Text, FlatList } from "react-native";
+import { useSelector } from "react-redux";
 import Page from "../components/Page";
-import { setPlaceName } from "../actions";
-import { sSearchPlaceText } from "../selectors";
+import { sUserInfo, sLoggedIn } from "../selectors";
+import { getUserBookings } from "../services/firebase/Bookings";
+
+
+const Item = ({storageName, datetime}) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{storageName} {datetime}</Text>
+  </View>
+);
+
+
 
 function MyBookingsScreen(props) {
+
+  const loggedIn = useSelector(sLoggedIn);
+  const userInfo = useSelector(sUserInfo);
+
+  let bookings = [];
+
+  useEffect(() => {
+    /*getUserBookings(userInfo.uid)
+    .then((docs) => {
+      console.log("getUserBooks", docs)
+       bookings = docs.map( (doc) => {
+                    return { id: doc.id, ...doc.data()}
+                  });
+                  console.log(bookings);
+    })
+    .catch((err) => {
+      console.log(err);
+    });*/
+  }, [userInfo, loggedIn]);
+
+
+
+  
+
   return (
     <Page style={styles.container}>
       <Text>My Bookings</Text>
+      {loggedIn && bookings.length>0 && <FlatList
+        data={bookings}
+        renderItem={({booking}) => <Item booking={booking} />}
+        keyExtractor={booking => booking.id}
+      />}
+      {loggedIn && bookings.length===0 && <Text>Non hai prenotazioni</Text>}
+      {!loggedIn && <Text>Non hai effettuato il login</Text>}
     </Page>
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    searchPlaceText: sSearchPlaceText(state),
-  };
-}
 
-function mapDispatchToProps(dispatch) {
-  return {
-    changeText(searchPlaceText) {
-      dispatch(setPlaceName(searchPlaceText));
-    },
-  };
-}
 
-//export default SearchScreen;
-const MyBookingsScreenContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MyBookingsScreen);
 
-export default MyBookingsScreenContainer;
+export default MyBookingsScreen;
 
 const styles = StyleSheet.create({
   container: {

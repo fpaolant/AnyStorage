@@ -1,19 +1,54 @@
-import { SET_PLACE_NAME } from "../actions/action-type";
+import {createSlice} from '@reduxjs/toolkit';
+import Config from '../constants/Config';
 
 const INITIAL_STATE = {
-    searchPlaceText: ""
+    searchPlaceText: "",
+    region: Config.mapDefaultRegion,
+    location: {}
 }
 
-export default function SearchPlaceReducer(state=INITIAL_STATE, action) {
-    switch (action.type) {
-        case SET_PLACE_NAME:
-            return{
-                ...state,
-                searchPlaceText: action.payload.searchPlaceText
-            }
-            break;
+export const  SearchPlaceSlice = createSlice({
+  name: 'searchPlace',
+  initialState: INITIAL_STATE,
+  reducers: {
+    resetPlaceText: (state) => {
+      state.searchPlaceText = INITIAL_STATE.searchPlaceText;
+    },
+    searchPlaceTextChange: (state, action) => {
+      state.searchPlaceText = action.payload;  
+    },
+    mapRegionChange: (state, action) => {
+      state.region = action.payload;
+    },
+    mapLocationChange: (state, action) => {
+      state.location = action.payload;
+    },
+  },
+});
+
+export const {
+    resetPlaceText,
+    searchPlaceTextChange,
+    mapRegionChange,
+    mapLocationChange,
+} = SearchPlaceSlice.actions;
+
+export default SearchPlaceSlice.reducer;
+
+
+
+
+// export default function SearchPlaceReducer(state=INITIAL_STATE, action) {
+//     switch (action.type) {
+//         case SET_PLACE_NAME:
+//             return{
+//                 ...state,
+//                 searchPlaceText: action.payload.searchPlaceText
+//             }
+//             break;
     
-        default:
-            return state;
-    }
-}
+//         default:
+//             return state;
+//     }
+// }
+

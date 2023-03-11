@@ -1,2 +1,4 @@
 export * from './AppSelectors';
-export * from './PlaceSelectors';
+export * from './SearchPlaceSelectors';
+export * from './UserSelectors';
+export * from './LoginRegisterSelectors'

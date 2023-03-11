@@ -1,7 +1,8 @@
-import { CHANGE_PAGE, FIRST_ACCESS } from "../actions/action-type";
+import { CHANGE_PAGE, FIRST_ACCESS, LOGIN, LOGOUT } from "../actions/action-type";
 const INITIAL_STATE = {
     page: 'splash',
-    isFirstAccess: true
+    isFirstAccess: true,
+    loading: false
 }
 
 // va inizializzato altrimenti è undefined
