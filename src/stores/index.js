@@ -15,19 +15,21 @@ import AppReducer from '../reducers/AppReducer';
 import SearchPlaceReducer from '../reducers/SearchPlaceReducer';
 import LoginRegisterReducer from '../reducers/LoginRegisterReducer';
 import UserReducer from '../reducers/UserReducer';
+import StoragesReducer from '../reducers/StoragesReducer';
 
 
 const reducers = combineReducers({
   app: AppReducer,
   loginRegister: LoginRegisterReducer,
   user: UserReducer,
-  searchPlace: SearchPlaceReducer
+  searchPlace: SearchPlaceReducer,
+  storages: StoragesReducer
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['loginRegister'], // <<<<<< reset 'app'
+  blacklist: ['loginRegister', 'searchPlace', 'storages'], // <<<<<< reset 'app'
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers);

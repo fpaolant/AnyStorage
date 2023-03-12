@@ -10,3 +10,6 @@ export const RECOVER_PASSWORD = 'RECOVER_PASSWORD';
 
 // Search Place Actions
 export const SET_PLACE_NAME = 'SET_PLACE_NAME';
+
+// Storages Actions
+export const GET_STORAGES_IN_MAP_REGION = 'GET_STORAGES_IN_MAP_REGION';

@@ -5,17 +5,19 @@ import { db } from './firebase';
 
 
 class Storage {
-    constructor (name, h24, note, position, price ) {
+    constructor (name, h24, note, latitude, longitude, price ) {
         this.name = name,
         this.h24 = h24;
         this.note = note;
-        this.position = position;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.price = price;
     }
     toString() {
         return this.name + ', ' 
             + this.h24 + ', ' + this.note + ', ' 
-            + this.position + ', ' + this.price;
+            + this.latitude + ', ' + this.longitude
+            + ', ' + this.price;
     }
 }
 
@@ -26,15 +28,18 @@ const StorageConverter = {
             name: storage.name,
             h24: storage.h24,
             note: storage.note,
-            position: storage.position,
+            position:  { latitude: storage.latitude, longitude: storage.longitude  },
             price: storage.price
         };
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
-        return new Booking(data.name, data.h24, data.note, data.position, data.price);
+        const latitude = data.position.latitude;
+        const longitude = data.position.longitude;
+        return new Storage(data.name, data.h24, data.note, latitude, longitude, data.price);
     }
 };
+
 
 
 
