@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as Location from 'expo-location';
-import MapView from "react-native-maps";
-
-
-import { sMapLocation, sMapRegion, sSearchPlaceText } from "../selectors";
+import MapView, { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
-import { mapLocationChange, mapRegionChange } from "../reducers/SearchPlaceReducer";
 
-import Page from "../components/Page";
+import { sMapLocation, sMapRegion, sSearchPlaceText, sStorages, sSelectedStorage } from "../selectors";
+import { mapLocationChange, mapRegionChange } from "../reducers/SearchPlaceReducer";
+import { selectStorage } from "../reducers/StoragesReducer";
+import { getStoragesInRegion } from "../actions/StoragesActions";
+
 import Config from "../constants/Config"
+import Images from "../images";
+import Page from "../components/Page";
+import BottomModalMap from "../components/BottomModalMap";
 
 
 
@@ -20,6 +23,8 @@ function MapScreen(props) {
   const location = useSelector(sMapLocation);
 
   const dispatch = useDispatch();
+  const storages = useSelector(sStorages);
+  const selectedStorage = useSelector(sSelectedStorage);
 
 
   useEffect(() => {
@@ -42,8 +47,18 @@ function MapScreen(props) {
     })();
   }, [city]);
 
+
+  useEffect(() => {
+    dispatch(getStoragesInRegion())
+  }, [region, region!=Config.mapDefaultRegion]) 
+
   function onRegionChange(region) {
     //dispatch(mapRegionChange(region)); // too slow
+  }
+
+  function onStorageTap(storage) {
+    console.log("pin id tapped:", storage.id)
+    dispatch(selectStorage(storage));
   }
 
   
@@ -51,21 +66,30 @@ function MapScreen(props) {
   return (
     <Page style={styles.container}>
       <Text style={styles.textcityname}>Map view in {city}</Text>
+      
       <MapView
         style={styles.map}
         region={region}
         onRegionChange={onRegionChange}
+        loadingEnabled={true}
       >
-        {/* // LIST OF MARKERS
-          this.state.markers.map((marker, index) => (
-          <Marker
-            key={index}
-            coordinate={marker.latlng}
-            title={marker.title}
-            description={marker.description}
-          />
-        ))*/}
+        { 
+          storages.map((storage, index) => (
+              <Marker
+                key={index}
+                coordinate={{ latitude : storage.latitude , longitude : storage.longitude }}
+                onPress={()=>{ onStorageTap(storage) }}
+                stopPropagation={true}
+                image={Images.MapIcon}
+              />
+             )
+        )}
       </MapView>
+      {selectedStorage && 
+        <BottomModalMap style={styles.storageContainer}>
+          <Text style={styles.textcityname}>{selectedStorage.name}</Text>
+        </BottomModalMap>
+      }
     </Page>
   );
 }
@@ -81,12 +105,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   textcityname: {
+    backgroundColor: 'blue',
     textAlign: "center",
-    backgroundColor: "blue",
     color: "#fff",
   },
   map: {
     width: "100%",
     height: "100%",
   },
+  storageContainer: {
+    height: 180,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    position: "fixed",
+    bottom: 200,
+  }
 });

@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import { StyleSheet, Image, TextInput, Button } from "react-native";
-import { connect, useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Page from "../components/Page";
 import Subtitle from "../components/typo/Title";
 import { setPlaceName, signOut } from "../actions";
@@ -8,13 +8,14 @@ import { sSearchPlaceText } from "../selectors";
 import Images from "../images";
 import { sLoggedIn } from "../selectors";
 
+
+
 function HomeScreen({ navigation }) {
 
   const dispatch = useDispatch();
 
 
   const onPressInHandle = () => {
-    //navigation.navigate('Geo');
     navigation.navigate('SearchPlace');
   }
 
@@ -37,6 +38,7 @@ function HomeScreen({ navigation }) {
     });
   }, [navigation, loggedIn]);
 
+  const searchPlace= useSelector(sSearchPlaceText);
 
 
 
@@ -48,33 +50,16 @@ function HomeScreen({ navigation }) {
             placeholder="Città, indirizzo o location"
             onPressIn={onPressInHandle}
             readOnly={true}
+            value={searchPlace}
             style={styles.input}
         />
     </Page>
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    searchPlaceText: sSearchPlaceText(state),
-  };
-}
 
-function mapDispatchToProps(dispatch) {
-  return {
-    changeText(searchPlaceText) {
-      dispatch(setPlaceName(searchPlaceText));
-    },
-  };
-}
 
-//export default HomeScreen;
-const HomeScreenContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HomeScreen);
-
-export default HomeScreenContainer;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
