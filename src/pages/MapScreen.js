@@ -1,22 +1,24 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import * as Location from 'expo-location';
 import MapView, { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 
 import { sMapLocation, sMapRegion, sSearchPlaceText, sStorages, sSelectedStorage } from "../selectors";
 import { mapLocationChange, mapRegionChange } from "../reducers/SearchPlaceReducer";
-import { selectStorage } from "../reducers/StoragesReducer";
+import { selectStorage, unSelectStorage } from "../reducers/StoragesReducer";
 import { getStoragesInRegion } from "../actions/StoragesActions";
 
-import Config from "../constants/Config"
+import Config from "../constants/Config";
+import Color from "../constants/Color";
 import Images from "../images";
 import Page from "../components/Page";
 import BottomModalMap from "../components/BottomModalMap";
+import ModalMapStorageContent from "../components/ModalMapStorageContent";
 
 
 
-function MapScreen(props) {
+function MapScreen({navigation}) {
 
   const city = useSelector(sSearchPlaceText);
   const region = useSelector(sMapRegion);
@@ -57,10 +59,21 @@ function MapScreen(props) {
   }
 
   function onStorageTap(storage) {
-    console.log("pin id tapped:", storage.id)
+    //console.log("pin id tapped:", storage.id)
     dispatch(selectStorage(storage));
   }
 
+  function onBook() {
+    navigation.navigate('Book');
+  }
+
+  function onViewDetail() {
+    navigation.navigate('storage');
+  }
+  
+  function onModalClose() {
+    dispatch(unSelectStorage());
+  }
   
 
   return (
@@ -86,8 +99,13 @@ function MapScreen(props) {
         )}
       </MapView>
       {selectedStorage && 
-        <BottomModalMap style={styles.storageContainer}>
-          <Text style={styles.textcityname}>{selectedStorage.name}</Text>
+        <BottomModalMap onClose={onModalClose}>
+          <ModalMapStorageContent 
+              storage={selectedStorage}
+              onView={onViewDetail}
+              onBook={onBook}
+          />
+          
         </BottomModalMap>
       }
     </Page>
@@ -105,19 +123,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   textcityname: {
-    backgroundColor: 'blue',
+    backgroundColor: Color.blue,
     textAlign: "center",
-    color: "#fff",
+    color: Color.white,
   },
   map: {
     width: "100%",
     height: "100%",
   },
-  storageContainer: {
-    height: 180,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    position: "fixed",
-    bottom: 200,
-  }
 });

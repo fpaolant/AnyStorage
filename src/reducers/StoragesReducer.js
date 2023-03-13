@@ -9,7 +9,7 @@ export const StoragesSlice = createSlice({
   name: 'storages',
   initialState: INITIAL_STATE,
   reducers: {
-    resetStorages: () =>  {
+    resetStorages: (state) =>  {
       state.storages = INITIAL_STATE.storages;
     },
     replaceStorages: function(state, action) {
