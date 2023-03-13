@@ -16,6 +16,7 @@ import SearchPlaceReducer from '../reducers/SearchPlaceReducer';
 import LoginRegisterReducer from '../reducers/LoginRegisterReducer';
 import UserReducer from '../reducers/UserReducer';
 import StoragesReducer from '../reducers/StoragesReducer';
+import CreateBookingReducer from '../reducers/CreateBookingReducer';
 
 
 const reducers = combineReducers({
@@ -23,13 +24,14 @@ const reducers = combineReducers({
   loginRegister: LoginRegisterReducer,
   user: UserReducer,
   searchPlace: SearchPlaceReducer,
-  storages: StoragesReducer
+  storages: StoragesReducer,
+  createBooking: CreateBookingReducer
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['loginRegister', 'searchPlace', 'storages'], // <<<<<< reset 'app'
+  blacklist: ['loginRegister', 'searchPlace', 'createBooking', 'storages'], // <<<<<< reset
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers);
