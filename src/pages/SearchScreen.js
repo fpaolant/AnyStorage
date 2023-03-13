@@ -10,13 +10,6 @@ import { searchPlaceTextChange } from "../reducers/SearchPlaceReducer";
 import Config from "../constants/Config"
 import Color from "../constants/Color";
 import Page from "../components/Page";
-
-
-
-
-
-
-
 import Subtitle from "../components/typo/Subtitle";
 
 
