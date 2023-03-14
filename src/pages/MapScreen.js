@@ -28,6 +28,10 @@ function MapScreen({navigation}) {
   const storages = useSelector(sStorages);
   const selectedStorage = useSelector(sSelectedStorage);
 
+  navigation.setOptions({
+    title: city,
+  });
+
 
   useEffect(() => {
     (async () => {
@@ -56,6 +60,9 @@ function MapScreen({navigation}) {
 
   function onRegionChange(region) {
     //dispatch(mapRegionChange(region)); // too slow
+    navigation.setOptions({
+      title: '',
+    });
   }
 
   function onStorageTap(storage) {
