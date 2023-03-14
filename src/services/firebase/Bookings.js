@@ -1,23 +1,24 @@
 import moment from 'moment';
-import { doc, setDoc, collection, getDocs, query, where, orderBy, Timestamp } from "firebase/firestore";
+import { doc, addDoc, collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from './firebase';
 
 
 
-class Booking {
-    constructor (datetime, price, qty, storageId, storageName, uid ) {
-        this.storageName = storageName,
+export class Booking {
+    constructor (datetime, days, amount, qty, storageId, storageName, uid) {
         this.datetime = datetime;
-        this.price = price;
+        this.days = days;
+        this.amount = amount;
         this.qty = qty;
         this.storageId = storageId;
+        this.storageName = storageName,
         this.uid = uid;
     }
     toString() {
         return this.storageName + ', ' 
-            + this.datetime + ', ' + this.price + ', ' 
-            + this.qty + ', ' + this.storageId + ', ' 
-            + this.uid;
+            + this.datetime + ', ' + this.days + ', ' 
+            + this.amount + ', ' + this.qty + ', ' 
+            + this.storageId + ', ' + this.uid;
     }
 }
 
@@ -25,11 +26,12 @@ class Booking {
 const BookingConverter = {
     toFirestore: (booking) => {
         return {
-            storageName: booking.storageName,
             datetime: booking.datetime,
-            price: booking.price,
+            days: booking.days,
+            amount: booking.amount,
             qty: booking.qty,
             storageId: booking.storageId,
+            storageName: booking.storageName,
             uid: booking.uid
         };
     },
@@ -38,22 +40,9 @@ const BookingConverter = {
         
         const readableDate = moment.unix(data.datetime.seconds).format("DD/MM/YYYY HH:mm");
 
-
-        return new Booking(data.storageName, readableDate, data.price, data.qty, data.storageId, data.uid);
+        return new Booking(readableDate, data.days, data.amount, data.qty, data.storageId, data.storageName, data.uid);
     }
 };
-/*
-AbbDQjHHacEu6orjoPaY  =>  {
-    "datetime": {"nanoseconds": 138000000, "seconds": 1680292979}, 
-    "price": 15, 
-    "qty": 1, 
-    "storageId": {"_key": {"path": [ut]}, 
-    "converter": null, 
-    "firestore": [Object], 
-    "type": "document"}, 
-    "uid": "h8XeYF1hVUSaic5c9opkgox1EJ03"}
-*/
-
 
 
 export function getUserBookings(uid) {
@@ -61,13 +50,8 @@ export function getUserBookings(uid) {
     return getDocs(q);
 }
 
-export function addBooking(datetime, price, qty, storageId, storageName, uid) {
-    const ref = doc(db, "bookings").withConverter(BookingConverter);
-    return setDoc(ref, new Booking(datetime, price, qty, storageId, storageName, uid) );
+export function addBooking(datetime, days, amount, qty, storageId, storageName, uid) {
+    const ref = collection(db, "bookings").withConverter(BookingConverter);
+    const booking = new Booking(datetime, days, amount, qty, storageId, storageName, uid);
+    return addDoc(ref,  booking);
 }
-
-
-
-
-
-

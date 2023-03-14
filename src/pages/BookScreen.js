@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import { sSelectedStorage, sCreateBookingDate, sCreateBookingQty, sCreateBookingDays } from '../selectors';
+import { sSelectedStorage, sCreateBookingDate, sCreateBookingQty, sCreateBookingDays, sLoggedIn } from '../selectors';
 import { resetBookingForm, setBookingDate, setBookingDays, setBookingQty } from '../reducers/CreateBookingReducer';
+import { addBooking } from '../actions';
 
 import Page from '../components/Page';
 import Title from '../components/typo/Title';
@@ -18,6 +18,7 @@ import Color from '../constants/Color';
 export default function BookScreen({navigation}) {
   const dispatch = useDispatch();
   const selectedStorage = useSelector(sSelectedStorage);
+  const loggedIn = useSelector(sLoggedIn);
 
   const datetime = useSelector(sCreateBookingDate);
   const date = new Date(datetime);
@@ -46,11 +47,15 @@ export default function BookScreen({navigation}) {
 
   const onCreateBooking = () => {
     console.log("create booking")
+    dispatch(addBooking(selectedStorage));
+  }
+
+  const onAccess = () => {
+    navigation.navigate('Access');
   }
 
 
   const [show, setShow] = useState(false);
-  const [showedDate, setShowedDate] = useState();
 
   const showDatePicker = function() {
     setShow(true)
@@ -78,7 +83,8 @@ export default function BookScreen({navigation}) {
             value={date}
             mode="date"
             display='calendar'
-            minimumDate={new Date()}
+            locale='it-IT'
+            minimumDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDay())}
             onChange={onChangeDate}
           />
         )}
@@ -115,15 +121,22 @@ export default function BookScreen({navigation}) {
 
       <Title text="Importo Totale"></Title>
       <View style={styles.inputView}>
-        <Text style={styles.amountText}>{qty*selectedStorage.price} €</Text>
+        <Text style={styles.amountText}>{qty*days*selectedStorage.price} €</Text>
       </View>
       
-      <TouchableOpacity
+      {loggedIn && <TouchableOpacity
           style={styles.mainActionBtn}
           onPress={onCreateBooking}
         >
           <Text>PRENOTA ORA</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+
+      {!loggedIn &&<TouchableOpacity
+          style={styles.mainActionBtn}
+          onPress={onAccess}
+        >
+          <Text>Entra per prenotare</Text>
+        </TouchableOpacity>}
       
     </Page>
   );

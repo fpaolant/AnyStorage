@@ -13,3 +13,7 @@ export const SET_PLACE_NAME = 'SET_PLACE_NAME';
 
 // Storages Actions
 export const GET_STORAGES_IN_MAP_REGION = 'GET_STORAGES_IN_MAP_REGION';
+
+// Boookings Actions
+export const GET_USER_BOOKINGS = 'GET_USER_BOOKINGS';
+export const ADD_BOOKING = 'ADD_BOOKING';
