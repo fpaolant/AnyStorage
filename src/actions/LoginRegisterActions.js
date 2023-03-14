@@ -4,7 +4,8 @@ import { sLoginRegisterLoginFormEmail, sLoginRegisterLoginFormPassword, sLoginRe
 import { LOGIN, LOGOUT, SIGNUP, RECOVER_PASSWORD } from "./action-type";
 import { setActiveUser, setUserLoggedOut } from "../reducers/UserReducer";
 import { resetLoginForm, resetRecoverPasswordForm, resetRegisterForm } from "../reducers/LoginRegisterReducer";
-import { goBack } from '../navigation/RootNavigator';
+import { goBack } from '../navigation/NavigationService';
+
 
 export const signIn = function() { 
     return function(dispatch, getState) {
@@ -24,18 +25,18 @@ export const signIn = function() {
                 })
 
                 Alert.alert('Accesso effettuato',
-                    'Benvenuto ' + displayName, [
+                    'Benvenuto ' + ((displayName!=null)? displayName: ''), [
                     {
                         text: 'OK', onPress: () => {
                             dispatch(resetLoginForm);
+                            goBack();
                         },
                     },
                 ]);
-                goBack();
             })
             .catch((error) => {
                 Alert.alert('Accesso non effettuato',
-                    'Il login è fallito per il seguente motivo: '+ error.message +'Verifica i dati e riprova', [
+                    'Il login è fallito per il seguente motivo: ' + error.message + ' Verifica i dati e riprova', [
                     {
                         text: 'OK', onPress: () => {
                             
@@ -96,7 +97,6 @@ export const signUp = () => {
             'La registrazione non è avvenuta per il seguente motivo: ' + error.message, [
               {
                 text: 'OK', onPress: () => {
-                  dispatch(resetRegisterForm);
                 },
               },
             ]);
