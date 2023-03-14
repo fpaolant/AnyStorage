@@ -1,54 +1,81 @@
-import React, { useCallback, useEffect } from "react";
-import { StyleSheet, Text, FlatList } from "react-native";
-import { useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
+import { StyleSheet, Text, FlatList, View, TouchableOpacity } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import Color from "../constants/Color";
+import { getBookings } from "../actions";
+import { resetBookings } from "../reducers/BookingsReducer";
+import { sLoggedIn, sBookings } from "../selectors";
 import Page from "../components/Page";
-import { sUserInfo, sLoggedIn } from "../selectors";
-import { getUserBookings } from "../services/firebase/Bookings";
-
-
-const Item = ({storageName, datetime}) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{storageName} {datetime}</Text>
-  </View>
-);
+import Title from "../components/typo/Title";
 
 
 
-function MyBookingsScreen(props) {
+const Item = ({booking}) => {
+  //console.log("item booking",booking)
+  return (
+    <View style={styles.item}>
+      <Text style={styles.title}>{booking.item.storageName}</Text>
+    </View>
+  )
+};
 
+
+
+function MyBookingsScreen({navigation}) {
+  const dispatch = useDispatch();
   const loggedIn = useSelector(sLoggedIn);
-  const userInfo = useSelector(sUserInfo);
+  const bookings = useSelector(sBookings);
 
-  let bookings = [];
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    /*getUserBookings(userInfo.uid)
-    .then((docs) => {
-      console.log("getUserBooks", docs)
-       bookings = docs.map( (doc) => {
-                    return { id: doc.id, ...doc.data()}
-                  });
-                  console.log(bookings);
-    })
-    .catch((err) => {
-      console.log(err);
-    });*/
-  }, [userInfo, loggedIn]);
+  navigation.setOptions({
+    title: '',
+  });
 
+  useFocusEffect(useCallback(function() {
+    if (bookings == null || bookings.length === 0) {
+      dispatch(getBookings());
+    }
+    return () => { // didUnmount
+      dispatch(resetBookings());
+    };
+  }, []));
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(resetBookings());
+    dispatch(getBookings());
+    setRefreshing(false);
+  }
 
+  const onLoginPress = () => {
+    navigation.navigate('Access');
+  }
   
 
   return (
     <Page style={styles.container}>
-      <Text>My Bookings</Text>
-      {loggedIn && bookings.length>0 && <FlatList
+      <Title text="Le mie prenotazioni"></Title>
+
+      {loggedIn && bookings.length>0 && 
+        <FlatList
         data={bookings}
-        renderItem={({booking}) => <Item booking={booking} />}
+        renderItem={(booking) => <Item booking={booking} />}
         keyExtractor={booking => booking.id}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
       />}
       {loggedIn && bookings.length===0 && <Text>Non hai prenotazioni</Text>}
-      {!loggedIn && <Text>Non hai effettuato il login</Text>}
+      {!loggedIn && 
+        <TouchableOpacity
+          style={styles.mainActionBtn}
+          onPress={onLoginPress}
+        >
+          <Text>Entra per visualizzarle</Text>
+        </TouchableOpacity>
+      
+      }
     </Page>
   );
 }
@@ -61,5 +88,24 @@ export default MyBookingsScreen;
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+    paddingTop: 30
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+  mainActionBtn: {
+    width: "80%",
+    backgroundColor: Color.primary,
+    color: Color.white,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
   }
 });
