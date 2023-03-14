@@ -14,6 +14,10 @@ function HomeScreen({ navigation }) {
 
   const dispatch = useDispatch();
 
+  navigation.setOptions({
+    title: '',
+  });
+
 
   const onPressInHandle = () => {
     navigation.navigate('SearchPlace');
