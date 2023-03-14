@@ -1,8 +1,9 @@
 import React from "react";
 import { useSelector } from 'react-redux';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNavigationContainerRef } from '@react-navigation/native';
+import Color from '../constants/Color'
 import HomeNavigator from "./HomeNavigator";
 import BookingsNavigator from "./BookingsNavigator";
 
@@ -14,11 +15,38 @@ import { sAppIsFirstAccess } from "../selectors";
 const RootStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const optionsTabNavigator = ({ route }) => ({
+  headerShown: false,
+  tabBarIcon: ({ focused, color, size }) => {
+    let iconName;
+
+    switch (route.name) {
+      case 'MyBookingsTab':
+        iconName = focused
+        ? 'calendar-range'
+        : 'calendar-range-outline';
+        break;
+      case 'HomeTab':   
+      default:
+        iconName = focused
+        ? 'store-search'
+        : 'store-search-outline';
+    }
+    return (<MaterialCommunityIcons name={iconName} size={size} color={color}></MaterialCommunityIcons>);
+  },
+  tabBarActiveTintColor: Color.blue,
+  tabBarInactiveTintColor: 'gray',
+});
 
 const TabNavigator = () => {
     return (
-        <Tab.Navigator screenOptions={{headerShown: false}}>
-            <Tab.Screen name={"HomeTab"} component={HomeNavigator} />
+        <Tab.Navigator screenOptions={optionsTabNavigator}>
+            <Tab.Screen name={"HomeTab"} component={HomeNavigator} screenOptions={{
+              tabBarIcon: ({ focused, color, size}) => {
+
+                return (<MaterialCommunityIcons name="store-search" size={size} color={color}></MaterialCommunityIcons>)
+              }
+            }}/>
             <Tab.Screen name={"MyBookingsTab"} component={BookingsNavigator} />
         </Tab.Navigator>
     );
@@ -38,20 +66,4 @@ export default function RootNavigator() {
             
         </RootStack.Navigator>
     );
-}
-
-
-
-export const serviceNavigator = createNavigationContainerRef();
-
-export function navigate(route, params) {
-  if (serviceNavigator.isReady()) {
-    serviceNavigator.navigate(route, params);
-  }
-}
-
-export function goBack() {
-  if (serviceNavigator.isReady()) {
-    serviceNavigator.goBack()
-  }
 }
