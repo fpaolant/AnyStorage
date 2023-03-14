@@ -10,8 +10,11 @@ export const BookingsSlice = createSlice({
   reducers: {
     resetBookings: () => INITIAL_STATE,
     addBookings: function(state, action) {
-     state.bookings = action.payload;
+      if (Array.isArray(action.payload.bookings)) {
+        state.bookings = action.payload.bookings;
+      }
     },
+    
     // extraReducers: (builder) => {
     //   builder.addCase(logout, () => INITIAL_STATE);
     // },

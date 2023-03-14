@@ -17,6 +17,7 @@ import LoginRegisterReducer from '../reducers/LoginRegisterReducer';
 import UserReducer from '../reducers/UserReducer';
 import StoragesReducer from '../reducers/StoragesReducer';
 import CreateBookingReducer from '../reducers/CreateBookingReducer';
+import BookingsReducer from '../reducers/BookingsReducer';
 
 
 const reducers = combineReducers({
@@ -25,7 +26,8 @@ const reducers = combineReducers({
   user: UserReducer,
   searchPlace: SearchPlaceReducer,
   storages: StoragesReducer,
-  createBooking: CreateBookingReducer
+  createBooking: CreateBookingReducer,
+  bookings: BookingsReducer,
 });
 
 const persistConfig = {
