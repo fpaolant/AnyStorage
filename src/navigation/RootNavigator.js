@@ -47,7 +47,7 @@ const TabNavigator = () => {
                 return (<MaterialCommunityIcons name="store-search" size={size} color={color}></MaterialCommunityIcons>)
               }
             }}/>
-            <Tab.Screen name={"MyBookingsTab"} component={BookingsNavigator} />
+            <Tab.Screen name={"MyBookingsTab"} component={BookingsNavigator} screenOptions={{ title: '' }} />
         </Tab.Navigator>
     );
 }
