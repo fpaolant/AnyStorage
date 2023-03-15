@@ -6,6 +6,10 @@ import { store, persistor } from './src/stores'
 import { NavigationContainer } from '@react-navigation/native';
 import  RootNavigator from './src/navigation/RootNavigator';
 import { navigationService } from './src/navigation/NavigationService';
+import moment from 'moment';
+import 'moment/locale/it'
+// Set moment to IT
+moment().locale('it');
 
 export default function App() {
 
