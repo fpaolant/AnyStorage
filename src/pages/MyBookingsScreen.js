@@ -8,17 +8,11 @@ import { resetBookings } from "../reducers/BookingsReducer";
 import { sLoggedIn, sBookings } from "../selectors";
 import Page from "../components/Page";
 import Title from "../components/typo/Title";
+import Booking from "../components/Booking";
 
 
 
-const Item = ({booking}) => {
-  //console.log("item booking",booking)
-  return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{booking.item.storageName}</Text>
-    </View>
-  )
-};
+
 
 
 
@@ -29,9 +23,9 @@ function MyBookingsScreen({navigation}) {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  navigation.setOptions({
-    title: '',
-  });
+  const renderItem = ({item}) => {
+    return <Booking booking={item} />;
+  };
 
   useFocusEffect(useCallback(function() {
     if (bookings == null || bookings.length === 0) {
@@ -61,7 +55,7 @@ function MyBookingsScreen({navigation}) {
       {loggedIn && bookings.length>0 && 
         <FlatList
         data={bookings}
-        renderItem={(booking) => <Item booking={booking} />}
+        renderItem={renderItem}
         keyExtractor={booking => booking.id}
         onRefresh={onRefresh}
         refreshing={refreshing}
