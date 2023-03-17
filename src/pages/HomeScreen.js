@@ -3,10 +3,11 @@ import { StyleSheet, Image, TextInput, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Page from "../components/Page";
 import Subtitle from "../components/typo/Title";
-import { setPlaceName, signOut } from "../actions";
-import { sSearchPlaceText } from "../selectors";
+import RapidCitySelection from "../components/RapidCitySelection";
 import Images from "../images";
+import { setPlaceName, signOut } from "../actions";
 import { sLoggedIn } from "../selectors";
+
 
 
 
@@ -36,9 +37,7 @@ function HomeScreen({ navigation }) {
     });
   }, [navigation, loggedIn]);
 
-  const searchPlace= useSelector(sSearchPlaceText);
-
-
+  
 
   return (
     <Page style={styles.container}>
@@ -48,9 +47,9 @@ function HomeScreen({ navigation }) {
             placeholder="Città, indirizzo o location"
             onPressIn={onPressInHandle}
             readOnly={true}
-            value={searchPlace}
             style={styles.input}
         />
+        <RapidCitySelection />
     </Page>
   );
 }
