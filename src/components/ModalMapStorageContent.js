@@ -12,7 +12,7 @@ export default function ModalMapStorageContent({storage, onView, onBook}) {
                   <Text style={styles.storageName}>{storage.name}</Text>
                   {storage.h24 && <Text style={styles.h24}>h24</Text>}
                 </View>
-                <View>
+                <View style={{flex: 1}}>
                     <Text style={styles.storagePrice}>{storage.price}€</Text>
                     <Text style={styles.storagePriceInfo}>/day per item</Text>
                     <View style={{flexDirection: 'row', marginVertical: 3}}>
@@ -47,15 +47,16 @@ const styles = StyleSheet.create({
     storageNameContainer: {
       flex: 1,
       flexDirection: 'row',
+      flexGrow: 0.3,
     }, 
     storageName: {
-      fontSize: 20,
+      fontSize: 16,
       fontWeight: 600,
       color: Color.blue
     },
     storagePrice: {
       marginTop: 5,
-      fontSize: 28,
+      fontSize: 18,
       fontWeight: 600,
       color: Color.white,
       backgroundColor: Color.blue,
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
       borderColor: Color.red,
       backgroundColor: Color.red,
       fontWeight: 600,
-      paddingLeft: 5
+      marginLeft: 5
     },
     bookBtn: {
       flex:1,

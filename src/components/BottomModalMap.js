@@ -14,7 +14,7 @@ export default function BottomModalMap({children, style, onClose=()=>{}}) {
                             style={styles.closeBtn}
                             onPress={onClose}
                         >
-                            <Ionicons name="close" size={24} color={Color.lightGrey} />
+                            <Ionicons name="close" size={16} color={Color.lightGrey} />
                         </TouchableOpacity>
                     <View style={styles.infoContainer}>
                             {children}
@@ -27,8 +27,8 @@ export default function BottomModalMap({children, style, onClose=()=>{}}) {
 const styles = StyleSheet.create({
     container: {
         position: "fixed",
-        bottom: "26%",
-        height: "23%",
+        bottom: "30%",
+        height: "26%",
         backgroundColor: 'transparent',
         paddingHorizontal: 20,
         paddingVertical: 10,
