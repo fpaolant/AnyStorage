@@ -16,7 +16,6 @@ const RapidCitySelection = function() {
 
 
     const handleOnPress = function(place) {
-        
         dispatch(searchPlaceTextChange(place));
         navigation.navigate('Map', {place});
     }
