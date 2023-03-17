@@ -18,9 +18,7 @@ export const StoragesSlice = createSlice({
       }
     },
     selectStorage: function(state, action) {
-      console.log("action", action)
       state.selectedStorage = action.payload;
-      console.log(state.selectedStorage);
     },
     unSelectStorage: function(state) {
       state.selectedStorage = INITIAL_STATE.selectedStorage;
