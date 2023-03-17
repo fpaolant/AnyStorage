@@ -1,24 +1,22 @@
-import { addDoc, collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { deleteDoc, addDoc, doc, collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from './firebase';
+import { Storage } from './Storages'
 
 
 
 export class Booking {
-    constructor (datetime, days, amount, qty, storageId, storageName, storageCity, uid) {
+    constructor (datetime, days, amount, qty, storage, uid) {
         this.datetime = datetime;
         this.days = days;
         this.amount = amount;
         this.qty = qty;
-        this.storageId = storageId;
-        this.storageName = storageName,
-        this.storageCity = storageCity,
+        this.storage = storage;
         this.uid = uid;
     }
     toString() {
-        return this.storageName + ', ' + this.storageCity + ', ' 
-            + this.datetime + ', ' + this.days + ', ' 
-            + this.amount + ', ' + this.qty + ', ' 
-            + this.storageId + ', ' + this.uid;
+        return 'datetime='+this.datetime + ', days=' + this.days + 
+                ', amount=' + this.amount + ', qty=' + this.qty + 
+                ', storage=' + this.storage + ', uid=' + this.uid + ', ' 
     }
 }
 
@@ -30,16 +28,20 @@ const BookingConverter = {
             days: booking.days,
             amount: booking.amount,
             qty: booking.qty,
-            storageId: booking.storageId,
-            storageName: booking.storageName,
-            storageCity: booking.storageCity,
+            storage: {
+                id: booking.storage.id,
+                name: booking.storage.name,
+                city: booking.storage.city,
+                latitude: booking.storage.latitude,
+                longitude: booking.storage.longitude
+            },
             uid: booking.uid
         };
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
         
-        return new Booking(data.datetime, data.days, data.amount, data.qty, data.storageId, data.storageName, data.storageCity, data.uid);
+        return new Booking(data.datetime, data.days, data.amount, data.qty, data.storage, data.uid);
     }
 };
 
@@ -49,8 +51,14 @@ export function getUserBookings(uid) {
     return getDocs(q);
 }
 
-export function addBooking(datetime, days, amount, qty, storageId, storageName, uid) {
+export function addBooking(datetime, days, amount, qty, storage, uid) {
     const ref = collection(db, "bookings").withConverter(BookingConverter);
-    const booking = new Booking(datetime, days, amount, qty, storageId, storageName, uid);
+    const booking = new Booking(datetime, days, amount, qty, storage, uid);
     return addDoc(ref,  booking);
+}
+
+export function deleteBooking(bookingId) {
+    const colRef = collection(db, "bookings");
+    const docRef = doc(colRef, bookingId)
+    return deleteDoc(docRef);
 }
