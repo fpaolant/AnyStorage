@@ -19,7 +19,7 @@ export default BookingsNavigator = () => {
     return (
         <BookingsStack.Navigator> 
             <BookingsStack.Group screenOptions={screenOptions}>
-                <BookingsStack.Screen name={'MyBookings'} component={MyBookingsScreen} />
+                <BookingsStack.Screen name={'MyBookings'} component={MyBookingsScreen} options={{title: ''}} />
             </BookingsStack.Group>
         </BookingsStack.Navigator>
     );

@@ -21,12 +21,12 @@ const optionsTabNavigator = ({ route }) => ({
     let iconName;
 
     switch (route.name) {
-      case 'MyBookingsTab':
+      case 'Prenotazioni':
         iconName = focused
         ? 'calendar-range'
         : 'calendar-range-outline';
         break;
-      case 'HomeTab':   
+      case 'Home':   
       default:
         iconName = focused
         ? 'store-search'
@@ -36,18 +36,14 @@ const optionsTabNavigator = ({ route }) => ({
   },
   tabBarActiveTintColor: Color.blue,
   tabBarInactiveTintColor: 'gray',
+  unmountOnBlur: true
 });
 
 const TabNavigator = () => {
     return (
         <Tab.Navigator screenOptions={optionsTabNavigator}>
-            <Tab.Screen name={"HomeTab"} component={HomeNavigator} screenOptions={{
-              tabBarIcon: ({ focused, color, size}) => {
-
-                return (<MaterialCommunityIcons name="store-search" size={size} color={color}></MaterialCommunityIcons>)
-              }
-            }}/>
-            <Tab.Screen name={"MyBookingsTab"} component={BookingsNavigator} screenOptions={{ title: '' }} />
+            <Tab.Screen name={"Home"} component={HomeNavigator} />
+            <Tab.Screen name={"Prenotazioni"} component={BookingsNavigator} />
         </Tab.Navigator>
     );
 }

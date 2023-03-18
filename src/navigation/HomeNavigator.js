@@ -23,7 +23,7 @@ export default HomeNavigator = () => {
     return (
         <HomeStack.Navigator> 
             <HomeStack.Group screenOptions={screenOptions}>
-                <HomeStack.Screen name={'Home'} component={HomeScreen} screenOptions={{title:''}}/>
+                <HomeStack.Screen name={'H'} component={HomeScreen} options={{ title: '' }} />
                 <HomeStack.Screen name={'Map'} component={MapScreen} />
                 <HomeStack.Screen name={'Book'} component={BookScreen} />
             </HomeStack.Group>
