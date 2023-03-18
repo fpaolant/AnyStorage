@@ -8,14 +8,14 @@ export function getStoragesInRegion() {
     return function(dispatch, getState) {
         const state = getState();
         const region = sMapRegion(state);
-        console.log("Action getStoragesInRegion region:", region);
+        //console.log("Action getStoragesInRegion region:", region);
 
         getStorages()
         .then((querySnapshot)=>{
             if(!querySnapshot.empty) {
                 let storages = [];
                 querySnapshot.docs.forEach(doc => {
-                    console.log("Action getStoragesInRegion :",doc.id, doc.data())
+                    //console.log("Action getStoragesInRegion :",doc.id, doc.data())
                     const docData = doc.data();
                     storages.push({ id: doc.id, ...docData});
                 });
