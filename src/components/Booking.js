@@ -38,8 +38,8 @@ export default function Booking({booking}) {
     }
 
     const getReadableDate = function() {
-        if(isExpired) return moment(booking.datetime).format('DD MMMM')
-        return moment(booking.datetime).startOf('day').fromNow()
+        if(isExpired()) return moment(booking.datetime).format('DD MMMM');
+        return moment(booking.datetime).startOf('day').fromNow();
     }
 
     
