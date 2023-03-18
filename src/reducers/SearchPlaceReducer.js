@@ -3,7 +3,7 @@ import Config from '../constants/Config';
 
 const INITIAL_STATE = {
     searchPlaceText: "",
-    historySearchPlaceText: ['Milano', 'Roma'],
+    historySearchPlaceText: ['Milano', 'Roma', 'Torino', 'Bologna'],
     region: Config.mapDefaultRegion,
     location: {}
 }
