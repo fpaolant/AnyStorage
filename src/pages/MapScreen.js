@@ -28,16 +28,16 @@ function MapScreen({navigation}) {
   const storages = useSelector(sStorages);
   const selectedStorage = useSelector(sSelectedStorage);
 
-  navigation.setOptions({
-    title: city,
-  });
+  // navigation.setOptions({
+  //   title: city,
+  // });
 
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        setErrorMsg("Permesso negato per accedere alla posizione");
         return;
       }
       //let location = await Location.getCurrentPositionAsync({});
@@ -51,6 +51,7 @@ function MapScreen({navigation}) {
       }
     
     })();
+    dispatch(unSelectStorage())
   }, [city]);
 
 
@@ -66,7 +67,6 @@ function MapScreen({navigation}) {
   }
 
   function onStorageTap(storage) {
-    //console.log("pin id tapped:", storage.id)
     dispatch(selectStorage(storage));
   }
 

@@ -25,14 +25,13 @@ function MyBookingsScreen({navigation}) {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(function() {
-
     if (bookings == null || bookings.length === 0) {
       dispatch(getBookings());
     }
     return () => { // didUnmount
       dispatch(resetBookings());
     };
-  }, []);
+  }, [loggedIn]);
 
 
 
@@ -80,7 +79,7 @@ function MyBookingsScreen({navigation}) {
           style={styles.mainActionBtn}
           onPress={onLoginPress}
         >
-          <Text style={{color: 'white'}}>Entra per visualizzarle</Text>
+          <Text style={{color: Color.white}}>Entra per visualizzarle</Text>
         </TouchableOpacity>
       }
     </Page>
@@ -102,11 +101,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column', 
     gap: 10, 
     alignItems: 'center'
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
   },
   title: {
     fontSize: 32,

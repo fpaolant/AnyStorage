@@ -122,7 +122,7 @@ function AccessScreen({ navigation: { goBack } }) {
             <TextInput
               style={styles.TextInput}
               placeholder="Email"
-              placeholderTextColor="#ddd"
+              placeholderTextColor={Color.muted}
               value={loginEmail}
               onChangeText={handleLoginEmailChange}
             />
@@ -131,14 +131,14 @@ function AccessScreen({ navigation: { goBack } }) {
             <TextInput
               style={styles.TextInput}
               placeholder="Password"
-              placeholderTextColor="#ddd"
+              placeholderTextColor={Color.muted}
               value={loginPassword}
               secureTextEntry={true}
               onChangeText={handleLoginPasswordChange}
             />
           </View>
           <TouchableOpacity onPress={() => onChangeView('forgotPassword')}>
-            <Text style={styles.forgot_button}>Forgot Password?</Text>
+            <Text style={styles.forgot_button}>Password dimenticata?</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.mainActionBtn}
@@ -152,13 +152,13 @@ function AccessScreen({ navigation: { goBack } }) {
             }
             onPress={onLoginPress}
           >
-            <Text>LOGIN</Text>
+            <Text style={{color: Color.white}}>LOGIN</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.secondaryActionBtn}
             onPress={() => onChangeView("signup")}
           >
-            <Text>REGISTRATI</Text>
+            <Text style={{color: Color.white}}>REGISTRATI</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
             <Text>CHIUDI</Text>
@@ -211,7 +211,7 @@ function AccessScreen({ navigation: { goBack } }) {
             }
             onPress={onSignupPress}
           >
-            <Text>Invia registrazione</Text>
+            <Text style={{color: Color.white}}>Invia registrazione</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.cancelBtn}
@@ -225,31 +225,32 @@ function AccessScreen({ navigation: { goBack } }) {
       {accessMode == "forgotPassword" && (
         <>
           <SubTitle text="Recupera password" />
-          <Text style={{marginBottom: 20}}>
-            verrà inviato un link per il reset della password se l'email è
-            registrata
-          </Text>
+          
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
               placeholder="Email"
-              placeholderTextColor="#ddd"
+              placeholderTextColor={Color.muted}
               value={recoverPasswordEmail}
               onChangeText={handleRecoverPasswordEmailChange}
             />
+            
           </View>
+          <Text style={{marginBottom: 20, textAlign: 'center', color: Color.muted}}>
+              verrà inviato un link per il reset della password sull'email registrata
+            </Text>
           <TouchableOpacity
             style={styles.mainActionBtn}
             disabled={!(recoverPasswordEmail != null && recoverPasswordEmail !== "")}
             onPress={onForgotPassword}
           >
-            <Text>Invia email link reset</Text>
+            <Text style={{color: Color.white}}>INVIA EMAIL LINK</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.cancelBtn}
             onPress={() => onChangeView("login")}
           >
-            <Text>Annulla</Text>
+            <Text>CHIUDI</Text>
           </TouchableOpacity>
         </>
       )}

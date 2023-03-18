@@ -173,13 +173,13 @@ const styles = StyleSheet.create({
   mainActionBtn: {
     width: "80%",
     backgroundColor: Color.primary,
-    color: 'white',
+    color: Color.white,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
   },
   mainActionBtnText: {
-    color: 'white',
+    color: Color.white,
     fontWeight: 600
   },
 }); 

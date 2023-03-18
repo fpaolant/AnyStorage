@@ -5,8 +5,9 @@ import Page from "../components/Page";
 import Subtitle from "../components/typo/Title";
 import RapidCitySelection from "../components/RapidCitySelection";
 import Images from "../images";
-import { setPlaceName, signOut } from "../actions";
+import { signOut } from "../actions";
 import { sLoggedIn } from "../selectors";
+import Color from "../constants/Color";
 
 
 
@@ -30,7 +31,6 @@ function HomeScreen({ navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      
       headerRight: () => (
         <Button onPress={loggedIn? onLogoutPress: onLoginPress} title={loggedIn? 'Esci': 'Entra'} />
       ),
@@ -42,13 +42,13 @@ function HomeScreen({ navigation }) {
   return (
     <Page style={styles.container}>
       <Image source={Images.Logo} style={styles.image} resizeMode={"contain"} />
-      <Subtitle text="Trova uno Storage" />
-      <TextInput
-            placeholder="Città, indirizzo o location"
-            onPressIn={onPressInHandle}
-            readOnly={true}
-            style={styles.input}
-        />
+        <Subtitle text="Trova uno Storage" />
+        <TextInput
+              style={styles.input}
+              placeholder="Città, indirizzo o location"
+              onPressIn={onPressInHandle}
+              readOnly={true}
+          />
         <RapidCitySelection />
     </Page>
   );
@@ -63,16 +63,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    marginTop: 50,
+    marginTop: 30,
     height: 150,
     marginBottom: 30,
   },
   input: {
     borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#d1d1d1',
-    minWidth: 200,
+    borderRadius: 3,
+    borderColor: Color.lightGrey,
     padding: 20,
-    width: '100%'
+    width: '100%',
+    textAlign: 'center'
   }
 });
