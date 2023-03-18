@@ -16,12 +16,12 @@ export default function ModalMapStorageContent({storage, onView, onBook}) {
                     <Text style={styles.storagePrice}>{storage.price}€</Text>
                     <Text style={styles.storagePriceInfo}>/day per item</Text>
                     <View style={{flexDirection: 'row', marginVertical: 3}}>
-                      <View style={styles.viewBtn}>
+                      {/* <View style={styles.viewBtn}>
                         <TouchableOpacity onPress={onView}>
                           <Text style={styles.viewBtnText}>VEDI</Text>
                         </TouchableOpacity>
                         
-                      </View>
+                      </View> */}
                       <View style={styles.bookBtn}>
                         <TouchableOpacity onPress={onBook}>
                             <Text style={styles.bookBtnText}>PRENOTA</Text>
