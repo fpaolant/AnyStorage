@@ -1,22 +1,45 @@
 import React, { useState } from "react";
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Color } from "../constants";
 import BookingDetailModal from "./BookingModal";
+import { useDispatch } from "react-redux";
+import { deleteBooking } from "../actions";
+
+
+
 
 export default function Booking({booking}) {
     const [modalVisible, setModalVisible] = useState(false);
     const handleNavigationToDetails = () => {
         setModalVisible(true);
     };
-    const deleteBookingItem = () => {
 
+    const dispatch = useDispatch();
+    const deleteBookingItem = () => {
+        Alert.alert('Elimina prenotazione',
+            'Confermi l\'eliminazione della prenotazione?', [
+              {
+                text: 'NO',
+              },
+              {
+                text: 'SI', onPress: () => {
+                    dispatch(deleteBooking(booking.id));
+                },
+              },
+            ]);
+        
     };
     const isSelected = false;
 
     const isExpired = function() {
         return moment(booking.datetime).isBefore();
+    }
+
+    const getReadableDate = function() {
+        if(isExpired) return moment(booking.datetime).format('DD MMMM')
+        return moment(booking.datetime).startOf('day').fromNow()
     }
 
     
@@ -26,16 +49,18 @@ export default function Booking({booking}) {
         <TouchableOpacity style={styles.container} onPress={handleNavigationToDetails}>
             <View style={styles.taskContainer}>
                 <View style={[styles.type, {backgroundColor: (isExpired())? Color.red: Color.green}]}></View>
-                {/*<TouchableOpacity style={styles.circleContainer}
-                                  onPress={handleToggleTask}>
-                    <View style={[
-                        styles.circle,
-                        isSelected ? styles.circleFull : undefined]} />
-                    </TouchableOpacity>}*/}
-                <Text style={styles.date}>{moment(booking.datetime).startOf('day').fromNow()}</Text>
-                <Text style={styles.name}>{booking.storageName}</Text>
-                <Text style={styles.city}>{booking.storageCity}</Text>
-                <Text style={styles.qty}>{booking.qty}<MaterialIcons name="luggage" size={14} color={Color.blue} /></Text>
+                <Text style={styles.date}>{getReadableDate()}</Text>
+                <View style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', paddingVertical: 10}}>
+                    <Text style={styles.name}>{booking.storage.name}</Text>
+                    <Text style={styles.city}>{booking.storage.city}</Text>
+                    <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <Text style={styles.qty}>{booking.qty}<MaterialIcons name="luggage" size={14} color={Color.blue} /></Text>
+                        <Text style={styles.qty}>{booking.qty}<MaterialIcons name="today" size={14} color={Color.blue} /></Text>
+                        <Text style={styles.amount}>{booking.amount} €</Text>
+                    </View>
+                </View>
+                
+                
             </View>
             {isExpired() && <View style={styles.actionContainer}>
                 <TouchableOpacity style={styles.actionButton}
@@ -52,7 +77,7 @@ export default function Booking({booking}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: 55,
+        height: 100,
         flexDirection: 'row',
         justifyContent: 'spaceBetween',
         backgroundColor: Color.white,
@@ -116,15 +141,13 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     name: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 700,
-        lineHeight: 17,
         color: Color.darkBlue,
         flexGrow: 1
     },
     city: {
         fontSize: 14,
-        lineHeight: 17,
         color: Color.darkBlue,
         flexGrow: 1
     },
@@ -132,6 +155,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 17,
         color: Color.blue,
+        flexGrow: 1
+    },
+    amount: {
+        fontSize: 14,
+        lineHeight: 17,
+        color: Color.green,
         flexGrow: 1
     },
 });

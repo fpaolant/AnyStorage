@@ -33,7 +33,7 @@ const reducers = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['loginRegister', 'searchPlace', 'createBooking', 'storages'], // <<<<<< reset
+  blacklist: ['loginRegister', 'searchPlace', 'createBooking', 'storages', 'bookings'], // <<<<<< reset
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers);

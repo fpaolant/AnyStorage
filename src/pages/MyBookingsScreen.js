@@ -1,7 +1,8 @@
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, FlatList, View, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { Feather } from '@expo/vector-icons';
 import Color from "../constants/Color";
 import { getBookings } from "../actions";
 import { resetBookings } from "../reducers/BookingsReducer";
@@ -23,18 +24,30 @@ function MyBookingsScreen({navigation}) {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const renderItem = ({item}) => {
-    return <Booking booking={item} />;
-  };
+  useEffect(function() {
 
-  useFocusEffect(useCallback(function() {
     if (bookings == null || bookings.length === 0) {
       dispatch(getBookings());
     }
     return () => { // didUnmount
       dispatch(resetBookings());
     };
-  }, []));
+  }, []);
+
+
+
+
+  const renderItem = ({item}) => {
+    return <Booking booking={item} />;
+  };
+  const renderEmptyContent = () => {
+    return <View style={styles.emptyContentContainer}>
+              <Text style={{color: Color.muted}}>Non hai prenotazioni</Text>
+              <Feather name="chevrons-down" size={48} color={Color.muted} />
+              <Text style={{color: Color.muted}}>Scroll down per ricaricare</Text>
+          </View>;
+  };
+  
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -52,23 +65,23 @@ function MyBookingsScreen({navigation}) {
     <Page style={styles.container}>
       <Title text="Le mie prenotazioni"></Title>
 
-      {loggedIn && bookings.length>0 && 
+      {loggedIn &&
         <FlatList
-        data={bookings}
-        renderItem={renderItem}
-        keyExtractor={booking => booking.id}
-        onRefresh={onRefresh}
-        refreshing={refreshing}
-      />}
-      {loggedIn && bookings.length===0 && <Text>Non hai prenotazioni</Text>}
+          data={bookings}
+          renderItem={renderItem}
+          keyExtractor={booking => booking.id}
+          onRefresh={onRefresh}
+          refreshing={refreshing}
+          ListEmptyComponent={renderEmptyContent}
+        />
+      }
       {!loggedIn && 
         <TouchableOpacity
           style={styles.mainActionBtn}
           onPress={onLoginPress}
         >
-          <Text>Entra per visualizzarle</Text>
+          <Text style={{color: 'white'}}>Entra per visualizzarle</Text>
         </TouchableOpacity>
-      
       }
     </Page>
   );
@@ -83,6 +96,12 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     paddingTop: 30
+  },
+  emptyContentContainer: {
+    marginTop: 100,  
+    flexDirection: 'column', 
+    gap: 10, 
+    alignItems: 'center'
   },
   item: {
     backgroundColor: '#f9c2ff',

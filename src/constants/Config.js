@@ -8,3 +8,8 @@ export default {
     mapDefaultRegion,
     mapSearchDelta
 }
+
+
+// booking config
+export const maxBookingDays = 30;
+export const maxBookingQty = 10;

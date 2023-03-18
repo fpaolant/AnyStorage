@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import { maxBookingDays, maxBookingQty } from '../constants/Config';
 
 const INITIAL_STATE = {
   datetime: new Date().getTime(),
@@ -14,15 +15,19 @@ export const CreateBookingSlice = createSlice({
       Object.assign(state, INITIAL_STATE);
     },
     setBookingDate: (state, action) => {
-      console.log("date",action)
       state.datetime = action.payload;
     },
-    setBookingDays: (state, action) => {
-      console.log(action)
-      state.days = action.payload;
+    addBookingDays: (state) => {
+      if(state.days<=maxBookingDays) Object.assign(state.days, state.days++);
     },
-    setBookingQty: (state, action) => {
-      state.qty = action.payload;
+    subBookingDays: (state) => {
+      if(state.days>1) Object.assign(state.days, state.days--);
+    },
+    addBookingQty: (state) => {
+      if(state.qty<maxBookingQty) Object.assign(state.qty, state.qty++);
+    },
+    subBookingQty: (state) => {
+      if(state.qty>1) Object.assign(state.qty, state.qty--);
     }
   },
 });
@@ -30,8 +35,10 @@ export const CreateBookingSlice = createSlice({
 export const {
   resetBookingForm,
   setBookingDate,
-  setBookingDays,
-  setBookingQty
+  addBookingDays,
+  subBookingDays,
+  addBookingQty,
+  subBookingQty
 } = CreateBookingSlice.actions;
 
 export default CreateBookingSlice.reducer;

@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { sSelectedStorage, sCreateBookingDate, sCreateBookingQty, sCreateBookingDays, sLoggedIn } from '../selectors';
-import { resetBookingForm, setBookingDate, setBookingDays, setBookingQty } from '../reducers/CreateBookingReducer';
+import { setBookingDate, addBookingDays, subBookingDays, addBookingQty, subBookingQty } from '../reducers/CreateBookingReducer';
 import { addBooking } from '../actions';
 
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import Page from '../components/Page';
 import Title from '../components/typo/Title';
 import Color from '../constants/Color';
+import InputNumber from '../components/InputNumber';
 
 
 
@@ -28,15 +30,22 @@ export default function BookScreen({navigation}) {
  
 
   navigation.setOptions({
-    title: selectedStorage.name,
+    title: selectedStorage?.name,
   });
 
-  const handleBookingQty = function(qty) {
-    dispatch(setBookingQty(qty));
+  const handleAddBookingQty = function() {
+   dispatch(addBookingQty());
   }
 
-  const handleBookingDays = function(days) {
-    dispatch(setBookingDays(days));
+  const handleSubBookingQty = function() {
+    dispatch(subBookingQty());
+   }
+
+  const handleAddBookingDays = function() {
+    dispatch(addBookingDays());
+  }
+  const handleSubBookingDays = function() {
+    dispatch(subBookingDays());
   }
 
   const onChangeDate = (event, selectedDate) => {
@@ -46,7 +55,6 @@ export default function BookScreen({navigation}) {
   };
 
   const onCreateBooking = () => {
-    console.log("create booking")
     dispatch(addBooking(selectedStorage));
   }
 
@@ -60,93 +68,88 @@ export default function BookScreen({navigation}) {
   const showDatePicker = function() {
     setShow(true)
   }
-
   
 
 
   return (
-    <Page style={styles.container}>
-      <Title text="Quando"></Title>      
-      <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            onPressIn={showDatePicker}
-            value={ datetime.toString()}
-            textAlign='center'
-            readOnly={true}
-          />
+    <KeyboardAvoidingWrapper>
+        <Page style={styles.container}>
+          <Title text="Quando"></Title>      
+          <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                onPressIn={showDatePicker}
+                value={ moment(datetime).format("ddd D MMMM YYYY") }
+                textAlign='center'
+                readOnly={true}
+              />
+              
+          </View>
+          {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode="date"
+                display='calendar'
+                locale='it-IT'
+                minimumDate={new Date()}
+                onChange={onChangeDate}
+              />
+            )}
+
+            <Title text="Quanti giorni"></Title>
+            <View style={styles.inputView}>
+              <InputNumber 
+                handleAdd={handleAddBookingDays}
+                handleSub={handleSubBookingDays} 
+                number={days}
+                />
+          </View>
+
+
+          <Title text="Quanti colli"></Title>
+          <View style={styles.inputView}>
+            <InputNumber 
+                  handleAdd={handleAddBookingQty}
+                  handleSub={handleSubBookingQty} 
+                  number={qty}
+                  />
+          </View>
+
+          <Title text="Importo Totale"></Title>
+          <View style={styles.inputView}>
+            <Text style={styles.amountText}>{qty*days*selectedStorage.price} €</Text>
+          </View>
           
-      </View>
-      {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            display='calendar'
-            locale='it-IT'
-            minimumDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDay())}
-            onChange={onChangeDate}
-          />
-        )}
+          {loggedIn && <TouchableOpacity
+              style={styles.mainActionBtn}
+              onPress={onCreateBooking}
+            >
+              <Text style={styles.mainActionBtnText}>PRENOTA ORA</Text>
+            </TouchableOpacity>}
 
-        <Title text="Quanti giorni"></Title>
-        <View style={styles.inputView}>
-        <TextInput
-            style={styles.TextInput}
-            placeholder="giorni"
-            placeholderTextColor="#ddd"
-            textAlign='center'
-            value={days.toString()}
-            maxLength={2}
-            keyboardType="number-pad"
-            onChangeText={handleBookingDays}
-          />
-      </View>
-
-
-
-      <Title text="Quanti colli"></Title>
-      <View style={styles.inputView}>
-        <TextInput
-            style={styles.TextInput}
-            placeholder="numero di colli"
-            placeholderTextColor="#ddd"
-            textAlign='center'
-            value={qty.toString()}
-            maxLength={2}
-            keyboardType="number-pad"
-            onChangeText={handleBookingQty}
-          />
-      </View>
-
-      <Title text="Importo Totale"></Title>
-      <View style={styles.inputView}>
-        <Text style={styles.amountText}>{qty*days*selectedStorage.price} €</Text>
-      </View>
-      
-      {loggedIn && <TouchableOpacity
-          style={styles.mainActionBtn}
-          onPress={onCreateBooking}
-        >
-          <Text>PRENOTA ORA</Text>
-        </TouchableOpacity>}
-
-      {!loggedIn &&<TouchableOpacity
-          style={styles.mainActionBtn}
-          onPress={onAccess}
-        >
-          <Text>Entra per prenotare</Text>
-        </TouchableOpacity>}
-      
-    </Page>
+          {!loggedIn &&<TouchableOpacity
+              style={styles.mainActionBtn}
+              onPress={onAccess}
+            >
+              <Text style={styles.mainActionBtnText}>Entra per prenotare</Text>
+            </TouchableOpacity>}
+          
+        </Page>
+      </KeyboardAvoidingWrapper>
   );
 }
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     paddingHorizontal: 20,
     alignItems: "center",
+  },
+  incDecrContainer: {
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'row'
   },
   inputView: {
     height: 45,
@@ -170,9 +173,13 @@ const styles = StyleSheet.create({
   mainActionBtn: {
     width: "80%",
     backgroundColor: Color.primary,
-    color: Color.white,
+    color: 'white',
     height: 50,
     alignItems: "center",
     justifyContent: "center",
+  },
+  mainActionBtnText: {
+    color: 'white',
+    fontWeight: 600
   },
 }); 
