@@ -34,12 +34,22 @@ export default function Booking({booking}) {
     const isSelected = false;
 
     const isExpired = function() {
-        return moment(booking.datetime).isBefore();
+        return moment(booking.datetime).startOf('day').add(1,"days").isBefore();
     }
 
     const getReadableDate = function() {
+        moment.updateLocale('it', {
+            calendar : {
+                lastDay : '[Ieri]',
+                sameDay : '[Oggi]',
+                nextDay : '[domani]',
+                lastWeek : 'DD MMMM',
+                nextWeek : 'DD MMMM',
+                sameElse : 'DD MMMM'
+            }
+        });
         if(isExpired()) return moment(booking.datetime).format('DD MMMM');
-        return moment(booking.datetime).startOf('day').fromNow();
+        return moment(booking.datetime).startOf('day').calendar();
     }
 
     
@@ -55,7 +65,7 @@ export default function Booking({booking}) {
                     <Text style={styles.city}>{booking.storage.city}</Text>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Text style={styles.qty}>{booking.qty}<MaterialIcons name="luggage" size={14} color={Color.blue} /></Text>
-                        <Text style={styles.qty}>{booking.qty}<MaterialIcons name="today" size={14} color={Color.blue} /></Text>
+                        <Text style={styles.qty}>{booking.days}<MaterialIcons name="today" size={14} color={Color.blue} /></Text>
                         <Text style={styles.amount}>{booking.amount} €</Text>
                     </View>
                 </View>
