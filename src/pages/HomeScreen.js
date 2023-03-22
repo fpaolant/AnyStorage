@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import { StyleSheet, Image, TextInput, Button } from "react-native";
+import { StyleSheet, Image, TextInput, Button, Text } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Page from "../components/Page";
 import Subtitle from "../components/typo/Title";
@@ -49,6 +49,7 @@ function HomeScreen({ navigation }) {
               onPressIn={onPressInHandle}
               readOnly={true}
           />
+        <Text style={styles.destinationsTitle}>Destinazioni principali</Text>
         <RapidCitySelection />
     </Page>
   );
@@ -74,5 +75,11 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '100%',
     textAlign: 'center'
+  },
+  destinationsTitle: {
+    marginTop: 30,
+    fontSize: 16,
+    fontWeight: 600,
+    color: Color.darkBlue
   }
 });

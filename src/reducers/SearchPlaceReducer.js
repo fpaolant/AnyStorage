@@ -47,21 +47,3 @@ export const {
 } = SearchPlaceSlice.actions;
 
 export default SearchPlaceSlice.reducer;
-
-
-
-
-// export default function SearchPlaceReducer(state=INITIAL_STATE, action) {
-//     switch (action.type) {
-//         case SET_PLACE_NAME:
-//             return{
-//                 ...state,
-//                 searchPlaceText: action.payload.searchPlaceText
-//             }
-//             break;
-    
-//         default:
-//             return state;
-//     }
-// }
-
