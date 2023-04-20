@@ -1,6 +1,5 @@
 import { deleteDoc, addDoc, doc, collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from './firebase';
-import { Storage } from './Storages'
 
 
 
