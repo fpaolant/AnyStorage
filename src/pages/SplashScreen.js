@@ -29,13 +29,15 @@ class SplashScreen extends React.Component {
 
         return (
             <Page style={styles.container}>
+                <Subtitle text="Benvenuto su" />
                 <Image 
                     source={Images.Luggage} 
                     style={styles.image}
                     resizeMode={'contain'}
                 />
-                <Title text="Benvenuto" />
-                <Subtitle text="l'applicazione per liberarti della valigia" />
+                <Title text="AnyStorage" />
+               
+                <Subtitle text="L'applicazione per liberarti della valigia" />
                 <MyButton 
                     text="Inizia ora" 
                     onPress={this.handleGettingStarted} />
